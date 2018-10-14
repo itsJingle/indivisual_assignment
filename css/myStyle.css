@@ -1,0 +1,10 @@
+.countryFlag {
+    width: 30px;
+    height: 30px;
+}
+
+#exRateTable {
+    border: 3px;
+    border-style: dot-dot-dash;
+    border-color: gold;
+}

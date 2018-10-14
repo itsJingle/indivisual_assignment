@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Individual Assignment</title>
+    <link rel="stylesheet" type="text/css" href="css/myStyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div id = "app">
+        <h2>AMOUNT</h2>
+        <input type="number" v-model.number = "amount">
+        <button type="button" class="btn btn-warning" @click="clickToChange()" >
+            <img src="css/refresh.svg"/>
+            <span>
+                Orientation
+            </span>
+        </button>
+        <button type="button" class="btn btn-warning" @click="manageBoth=false" >
+            Manage rows and columns Separately
+        </button>
+        <button type="button" class="btn btn-warning" @click="manageBoth=true" >
+            Manage rows and columns together
+        </button>
+        <br>
+        <br>
+
+
+        <table border="2" id="exchangeTable">
+            <tbody>
+
+
+
+                <!--first row to display currencyType in topRow-->
+                <tr>
+                    <td>
+                        <img v-if="baseOnTopRow" src="css/arrow_right.svg"/>
+                        <img v-else src="css/arrow_down.svg"/>
+                    </td>
+                    <td v-for="each in topRow">
+                        <button @click="clickToRemove(each, topRow)">
+                            <img class="countryFlag" :src="flagPath[each]"/>
+                            <span>{{ each }}</span>
+                        </button>
+                    </td>
+                    <td  v-if="!manageBoth">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" >
+                                <table>
+                                    <tbody>
+                                        <tr v-for="eachI in 8">
+                                            <td v-for="eachJ in 4">
+                                                <button type="button" v-bind:disabled="ifDisabled(latestJson[4*(eachI-1)+eachJ-1], true)"  @click="clickToAdd(latestJson[4*(eachI-1)+eachJ-1], true)">
+                                                    <img class="countryFlag" :src="flagPath[latestJson[4*(eachI-1)+eachJ-1]]"/>
+                                                    <span>
+                                                     {{ latestJson[4*(eachI-1)+eachJ-1] }}
+                                                </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+
+
+                <!--refresh data in table-->
+
+
+
+
+                <tr v-for="(targetCur, targetIndex) in leftCol">
+                    <td>
+                        <button @click="clickToRemove(targetCur, leftCol)">
+                            <img class="countryFlag" :src="flagPath[targetCur]"/>
+                        <span>{{ targetCur }}</span>
+                        </button>
+                    </td>
+                    <td v-for="(baseCur, baseIndex) in topRow">
+                        <template v-if="baseOnTopRow && baseJson[baseCur] != undefined">
+                            {{ (baseJson[baseCur]["rates"][targetCur]*amount).toFixed(2) }}
+                        </template>
+                        <template v-if="!baseOnTopRow && baseJson[targetCur] != undefined">
+                            {{ (baseJson[targetCur]["rates"][baseCur]*amount).toFixed(2) }}
+                        </template>
+                    </td>
+                </tr>
+
+
+
+
+                <!--the last row for inserting new currencyType-->
+                <tr>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" >
+                                <table>
+                                    <tbody>
+                                    <tr v-for="eachI in 8">
+                                        <td v-for="eachJ in 4">
+                                            <button type="button" v-bind:disabled="ifDisabled(latestJson[4*(eachI-1)+eachJ-1], false)"  @click="clickToAdd(latestJson[4*(eachI-1)+eachJ-1], false)">
+                                                <img class="countryFlag" :src="flagPath[latestJson[4*(eachI-1)+eachJ-1]]"/>
+                                                <span>
+                                                     {{ latestJson[4*(eachI-1)+eachJ-1] }}
+                                                </span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/javascript" src="js/testJavaScript.js"></script>
+</body>
+</html>
+
+
