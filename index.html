@@ -54,8 +54,8 @@
                             <div class="dropdown-menu" >
                                 <table>
                                     <tbody>
-                                        <tr v-for="eachI in 8">
-                                            <td v-for="eachJ in 4">
+                                        <tr v-for="eachI in 9">
+                                            <td v-for="eachJ in 4" v-if="(4*(eachI-1)+eachJ-1) < 33">
                                                 <button type="button" v-bind:disabled="ifDisabled(latestJson[4*(eachI-1)+eachJ-1], true)"  @click="clickToAdd(latestJson[4*(eachI-1)+eachJ-1], true)">
                                                     <img class="countryFlag" :src="flagPath[latestJson[4*(eachI-1)+eachJ-1]]"/>
                                                     <span>
@@ -83,14 +83,15 @@
                         </button>
                     </td>
                     <td v-for="(baseCur, baseIndex) in topRow" >
-                        <span v-if="baseJson[baseCur] == undefined"></span>
-                        <span v-else-if="baseJson[targetCur] == undefined"></span>
-                        <span v-else-if="baseOnTopRow">
+                        <template v-if="baseCur == targetCur">
+                            {{ (1*amount).toFixed(2) }}
+                        </template>
+                        <template v-else-if="baseOnTopRow && baseJson[baseCur] != undefined">
                             {{ (baseJson[baseCur]["rates"][targetCur]*amount).toFixed(2) }}
-                        </span>
-                        <span v-else="!baseOnTopRow">
+                        </template>
+                        <template v-else-if="!baseOnTopRow && baseJson[targetCur] != undefined">
                             {{ (baseJson[targetCur]["rates"][baseCur]*amount).toFixed(2) }}
-                        </span>
+                        </template>
                     </td>
                 </tr>
 
@@ -105,8 +106,8 @@
                             <div class="dropdown-menu" >
                                 <table>
                                     <tbody>
-                                    <tr v-for="eachI in 8">
-                                        <td v-for="eachJ in 4">
+                                    <tr v-for="eachI in 9">
+                                        <td v-for="eachJ in 4" v-if="(4*(eachI-1)+eachJ-1) < 33">
                                             <button type="button" v-bind:disabled="ifDisabled(latestJson[4*(eachI-1)+eachJ-1], false)"  @click="clickToAdd(latestJson[4*(eachI-1)+eachJ-1], false)">
                                                 <img class="countryFlag" :src="flagPath[latestJson[4*(eachI-1)+eachJ-1]]"/>
                                                 <span>

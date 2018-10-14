@@ -47,7 +47,6 @@ var app = new Vue({
                         .then(json => {
                             this.baseJson[json["base"]] = json;
                             this.$forceUpdate();
-                            // this.baseJson.setItem(json["base"], json);
                         });
                 }
             }
@@ -116,8 +115,3 @@ Array.prototype.remove = function(val) {
         this.splice(index, 1);
     }
 };
-//
-// $(document).ready(function() {
-//
-//     app.refreshBaseCurrency();
-// });
